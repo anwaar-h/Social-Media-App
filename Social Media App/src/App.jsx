@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { path } from 'framer-motion/client'
 import AuthLayout from './layouts/AuthLayout'
 import MainLayout from './layouts/MainLayout'
 import FeedPage from './pages/FeedPage'
@@ -10,19 +9,21 @@ import ProfilePage from './pages/ProfilePage'
 import PostDetailsPage from './pages/PostDetailsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import RegisterPage from './pages/RegisterPage'
+import ProtectedRoute from './protectedRoutes/ProtectedRoute'
+import ProtectedAuthRoute from './protectedRoutes/ProtectedAuthRoute'
 const router = createBrowserRouter([
   {
     path: '', element: <AuthLayout/>, children:[
-      {path: 'login', element: <LoginPage/>},
-      {path: 'register', element: <RegisterPage/>},
+      {path: 'login', element:<ProtectedAuthRoute><LoginPage/></ProtectedAuthRoute> },
+      {path: 'register', element:<ProtectedAuthRoute><RegisterPage/></ProtectedAuthRoute> },
     
     ]
   },
   {
     path: '/', element: <MainLayout/>,children:[
-      {index: true, element: <FeedPage/>},
-      {path: 'post-details', element: <PostDetailsPage/>},
-      {path: 'profile', element: <ProfilePage/>},
+      {index: true, element:<ProtectedRoute><FeedPage/></ProtectedRoute>},
+      {path: 'post-details', element: <ProtectedRoute><PostDetailsPage/></ProtectedRoute> },
+      {path: 'profile', element:<ProtectedRoute><ProfilePage/></ProtectedRoute>},
       {path: '*', element: <NotFoundPage/>}
     ]
   }
@@ -30,11 +31,10 @@ const router = createBrowserRouter([
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-    <RouterProvider router={router}/>
+    {<RouterProvider router={router}/>}
     </>
   )
 }

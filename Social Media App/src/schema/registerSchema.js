@@ -1,16 +1,15 @@
-import React from 'react'
 import * as zod from 'zod'
-export const schema = zod.object({
+export const registerSchema = zod.object({
     name: zod.string()
         .nonempty("Name is required")
         .min(3 , "Name must be atleast 3 characters")
         .max(20 , "Name must be at most 20 characters"),
     email: zod.string()
         .nonempty("Emai is required")
-        .regex(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, "Email is not valid"),
+        .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Email is not valid"),
     password: zod.string()
         .nonempty("Password is required")
-        .regex(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"),
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"),
     rePassword: zod.string()
         .nonempty("Confirm Password is required"),
     dateOfBirth: zod.coerce.date().refine((data) =>{
@@ -27,4 +26,4 @@ export const schema = zod.object({
 }).refine(  (data) => data.password === data.rePassword, {
     message: "Passwords do not match", path: ["rePassword"]  })
 
-
+export default registerSchema ;

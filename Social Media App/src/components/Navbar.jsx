@@ -1,39 +1,48 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Navbar as HeroUINavbar , NavbarBrand, NavbarContent, NavbarItem,Link,Button } from '@heroui/react'
+import { useNavigate } from 'react-router-dom'
+import { nav } from 'framer-motion/client'
+import { authContext } from '../contexts/AuthContext'
+
 
 export default function Navbar() {
-  return (
-    <Navbar>
-      <NavbarBrand>
-        <AcmeLogo />
-        <p className="font-bold text-inherit">ACME</p>
-      </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link aria-current="page" href="#">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem>
+    const navigate = useNavigate()
+    const { isLoggedIn, setIsLoggedIn } = useContext(authContext)
+
+    function signout(){
+        localStorage.removeItem("token")
+        navigate("/login")
+    }
+
+    return (
+    <HeroUINavbar>
+        <NavbarBrand>
+            <p className="font-bold text-inherit">CIRCLE</p>
+        </NavbarBrand>
+        <NavbarContent justify="end">
+            {
+                isLoggedIn ?
+                <NavbarItem>
+                <Button onPress={signout} color="danger" variant="flat">
+                Sign Out
+                </Button>
+                </NavbarItem>
+                :
+                <>
+                <NavbarItem className='hidden lg:flex'>
+                <Link className='cursor-pointer' to={"/login"}>Login</Link>
+                </NavbarItem>
+                <NavbarItem>
+                <Button onPress={() => navigate("/register")} color="primary" variant="flat">
+                Sign Up
+                </Button>
+                </NavbarItem>
+                </>
+            }  
+            
+        
+        
       </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
+    </HeroUINavbar>
   )
 }

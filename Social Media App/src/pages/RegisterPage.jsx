@@ -1,16 +1,19 @@
 import { Input, Select, SelectItem, Button } from "@heroui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { registerSchema } from "../schema/registerSchema" 
+import  registerSchema  from "../schema/registerSchema" 
 import { registerApi } from "../services/authServices";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { div } from "framer-motion/client";
+import { counterContext } from "../contexts/CounterContext";
 
 export default function RegisterPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [errMsg, setErrMsg] = useState("")
     const [successMsg, setSuccessMsg] = useState("")
     const navigate = useNavigate()
+    const { counter } = useContext(counterContext)
     const {handleSubmit, register, formState:{errors} , reset } = useForm({
         defaultValues: {
             name: "",
@@ -34,6 +37,7 @@ export default function RegisterPage() {
             setErrMsg(data.error)
         } else{
             setSuccessMsg(data.message)
+            reset() 
             setInterval(() => {
                 navigate("/login")
             } , 1000 )
@@ -42,7 +46,8 @@ export default function RegisterPage() {
  
     return (
     <form onSubmit={handleSubmit(handleRegister)}>
-            <h1 className="text-center text-shadow-lg">Register Page</h1>
+        <div className="flex flex-col gap-6">
+            <h1 className="text-center">Register Page</h1>
             <Input isInvalid={Boolean(errors.name)} errorMessage={errors.name?.message} type="name" name="name" label="Name" variant="bordered" {...register("name")} />
             <Input isInvalid={Boolean(errors.email)} errorMessage={errors.email?.message} type="email" name="email" label="Email" variant="bordered" {...register("email")} />
             <Input isInvalid={Boolean(errors.password)} errorMessage={errors.password?.message} type="password" name="password" label="Password" variant="bordered" {...register("password")} />
@@ -54,9 +59,12 @@ export default function RegisterPage() {
             </Select>
             <>
             <Button isLoading={isLoading} type="submit" color="primary" variant="bordered">Register</Button>
+            <p className="font-bold text-center">Already Have An Account <Link to={"/login"} className=" text-center text-primary-500">Login Now</Link> </p>
+
             {errMsg && <p className='text-sm bg-red-200 rounded-md p-2 text-red-800 text-center mt-0'>{errMsg}</p>}
             {successMsg && <p className='text-sm bg-green-200 rounded-md p-2 text-green-800 text-center mt-0'>{successMsg}</p>}
             </>
+    </div>
     </form>
   )
 }

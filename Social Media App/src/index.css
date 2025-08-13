@@ -8,3 +8,8 @@
     @apply text-2xl font-bold;
   }
 }
+@layer utilities {
+  .container{
+    @apply mx-auto;
+  }
+}
