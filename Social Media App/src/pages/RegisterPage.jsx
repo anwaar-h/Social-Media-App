@@ -13,7 +13,6 @@ export default function RegisterPage() {
     const [errMsg, setErrMsg] = useState("")
     const [successMsg, setSuccessMsg] = useState("")
     const navigate = useNavigate()
-    const { counter } = useContext(counterContext)
     const {handleSubmit, register, formState:{errors} , reset } = useForm({
         defaultValues: {
             name: "",

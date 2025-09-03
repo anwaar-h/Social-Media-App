@@ -6,17 +6,17 @@ import loginSchema from "../schema/loginSchema";
 import { Link, useNavigate } from "react-router-dom";
 import { counterContext } from "../contexts/CounterContext";
 import { authContext } from "../contexts/AuthContext";
+import { loginApi } from "../services/authServices";
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [errMsg, setErrMsg] = useState("");
     const navigate = useNavigate()
-    const {counter} = useContext (counterContext)
     const { setIsLoggedIn } = useContext(authContext)
     
     const {handleSubmit, register,formState: { errors },} = useForm({
     defaultValues: {
-        email: "",
-        password: "",
+        email: "anwaar7@gmail.com",
+        password: "Anwaar1234567?",
     },
     resolver: zodResolver(loginSchema),
     mode: "onTouched",
@@ -27,12 +27,13 @@ export default function LoginPage() {
     setErrMsg("");
     const data = await loginApi(formData);
     setIsLoading(false);
+
     if (data.message == "success")  {
         localStorage.setItem("token", data.token)
         setIsLoggedIn(true)
         navigate("/")
     } else if (data.error)  {
-        setErrMsg(data.error);
+        setErrMsg(data);
     }
     }
 

@@ -1,23 +1,25 @@
-import React, { useContext } from 'react'
-import { Navbar as HeroUINavbar , NavbarBrand, NavbarContent, NavbarItem,Link,Button } from '@heroui/react'
+import { useContext } from 'react'
+import { Navbar as HeroUINavbar , NavbarBrand, NavbarContent, NavbarItem, Link, Button } from '@heroui/react'
 import { useNavigate } from 'react-router-dom'
-import { nav } from 'framer-motion/client'
 import { authContext } from '../contexts/AuthContext'
+import { counterContext } from '../contexts/CounterContext'
 
 
 export default function Navbar() {
     const navigate = useNavigate()
     const { isLoggedIn, setIsLoggedIn } = useContext(authContext)
+    const {counter} = useContext(counterContext)
 
     function signout(){
         localStorage.removeItem("token")
+        setIsLoggedIn(false)
         navigate("/login")
     }
 
     return (
     <HeroUINavbar>
         <NavbarBrand>
-            <p className="font-bold text-inherit">CIRCLE</p>
+            <Link to={"/"} className="font-bold text-inherit">CIRCLE</Link>
         </NavbarBrand>
         <NavbarContent justify="end">
             {
@@ -38,11 +40,8 @@ export default function Navbar() {
                 </Button>
                 </NavbarItem>
                 </>
-            }  
-            
-        
-        
-      </NavbarContent>
+            }        
+        </NavbarContent>
     </HeroUINavbar>
-  )
+    )
 }

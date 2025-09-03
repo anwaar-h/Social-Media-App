@@ -8,8 +8,9 @@ export const registerSchema = zod.object({
         .nonempty("Emai is required")
         .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Email is not valid"),
     password: zod.string()
-        .nonempty("Password is required")
-        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number"),
+    .nonempty("Password is required")
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#?!@$%^&*-])[A-Za-z\d#?!@$%^&*-]{8,}$/, 
+    "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (#?!@$%^&*-)"),
     rePassword: zod.string()
         .nonempty("Confirm Password is required"),
     dateOfBirth: zod.coerce.date().refine((data) =>{
